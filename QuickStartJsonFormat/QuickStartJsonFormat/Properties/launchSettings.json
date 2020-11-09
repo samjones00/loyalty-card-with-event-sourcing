@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "QuickStartJsonFormat": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

@@ -9,14 +9,14 @@ namespace QuickStartJsonFormat
     {
         static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Connecting to event store...");
 
             await JsonFormat();
         }
 
         public static async Task JsonFormat()
         {
-            var conn = EventStoreConnection.Create(new Uri("tcp://admin:changeit@localhost:1113"));
+            var conn = EventStoreConnection.Create(new Uri("tcp://admin:changeit@eventstore:1113"));
             await conn.ConnectAsync();
 
             const string streamName = "test-stream";
