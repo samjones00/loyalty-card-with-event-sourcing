@@ -5,16 +5,16 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["EventStoreHelloWorld/EventStoreHelloWorld.csproj", "EventStoreHelloWorld/"]
-RUN dotnet restore "EventStoreHelloWorld/EventStoreHelloWorld.csproj"
+COPY ["LoyaltyCard.Core/LoyaltyCard.Core.csproj", "LoyaltyCard.Core/"]
+RUN dotnet restore "LoyaltyCard.Core/LoyaltyCard.Core.csproj"
 COPY . .
-WORKDIR "/src/EventStoreHelloWorld"
-RUN dotnet build "EventStoreHelloWorld.csproj" -c Release -o /app/build
+WORKDIR "/src/LoyaltyCard.Core"
+RUN dotnet build "LoyaltyCard.Core.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "EventStoreHelloWorld.csproj" -c Release -o /app/publish
+RUN dotnet publish "LoyaltyCard.Core.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "EventStoreHelloWorld.dll"]
+ENTRYPOINT ["dotnet", "LoyaltyCard.Core.dll"]

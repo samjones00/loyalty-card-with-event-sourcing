@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EventStoreHelloWorld.Events
+namespace LoyaltyCard.Core.Events
 {
     public class NameChanged : IEvent
     {

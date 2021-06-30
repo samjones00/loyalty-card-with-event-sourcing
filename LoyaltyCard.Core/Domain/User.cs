@@ -1,7 +1,7 @@
-﻿using EventStoreHelloWorld.Events;
+﻿using LoyaltyCard.Core.Events;
 using System;
 
-namespace EventStoreHelloWorld.Domain
+namespace LoyaltyCard.Core.Domain
 {
     public class User : Aggregate
     {

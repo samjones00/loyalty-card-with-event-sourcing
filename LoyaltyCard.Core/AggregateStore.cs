@@ -1,33 +1,31 @@
 ﻿using EventStore.ClientAPI;
-using EventStore.ClientAPI.SystemData;
+using LoyaltyCard.Core.Extensions;
+using LoyaltyCard.Core.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using static System.String;
 
-namespace EventStoreHelloWorld
+namespace LoyaltyCard.Core
 {
-    public class AggregateStore
+    public class AggregateStore : IAggregateStore
     {
         const int MaxReadSize = 4096;
         readonly IEventStoreConnection _connection;
-        readonly UserCredentials _userCredentials;
-        private readonly string _stream;
+        readonly EventStore.ClientAPI.SystemData.UserCredentials _userCredentials;
 
-        public AggregateStore(IEventStoreConnection connection, string stream)
+        public AggregateStore(IEventStoreConnection connection)
         {
             _connection = connection;
-            this._stream = stream;
         }
 
         public async Task<T> Load<T>(Guid userId, CancellationToken cancellationToken = default)
             where T : Aggregate, new()
         {
+            var streamName = StreamExtensions.GetStreamName<T>(userId);
             //if (IsNullOrWhiteSpace(aggregateId))
             //    throw new ArgumentException("Value cannot be null or whitespace.", nameof(aggregateId));
 
@@ -37,7 +35,7 @@ namespace EventStoreHelloWorld
             do
             {
                 var page = await _connection.ReadStreamEventsForwardAsync(
-                    _stream, nextPageStart, MaxReadSize, false, _userCredentials);
+                    streamName, nextPageStart, MaxReadSize, false, _userCredentials);
 
                 if (page.Events.Length > 0)
                 {
@@ -50,7 +48,7 @@ namespace EventStoreHelloWorld
                 nextPageStart = !page.IsEndOfStream ? page.NextEventNumber : -1;
             } while (nextPageStart != -1);
 
-           // Log.Debug("Loaded {aggregate} changes from stream {stream}", aggregate, _stream);
+            // Log.Debug("Loaded {aggregate} changes from stream {stream}", aggregate, _stream);
 
             return aggregate;
         }
@@ -66,8 +64,10 @@ namespace EventStoreHelloWorld
             if (aggregate == null)
                 throw new ArgumentNullException(nameof(aggregate));
 
+            var streamName = StreamExtensions.GetStreamName<T>(aggregate.Id);
+
             var changes = aggregate.GetChanges()
-                .Select(e => new EventData(Guid.NewGuid(), e.GetType().FullName, true, Serialize(e), null)).ToArray();
+                .Select(e => new EventStore.ClientAPI.EventData(Guid.NewGuid(), e.GetType().FullName, true, Serialize(e), null)).ToArray();
 
             if (!changes.Any())
             {
@@ -80,20 +80,20 @@ namespace EventStoreHelloWorld
             WriteResult result;
             try
             {
-                result = await _connection.AppendToStreamAsync(_stream, aggregate.Version, changes, _userCredentials);
+                result = await _connection.AppendToStreamAsync(streamName, aggregate.Version, changes, _userCredentials);
             }
             catch (Exception)
             {
-                var page = await _connection.ReadStreamEventsBackwardAsync(_stream, -1, 1, false, _userCredentials);
+                var page = await _connection.ReadStreamEventsBackwardAsync(streamName, -1, 1, false, _userCredentials);
                 throw new Exception(
-                    $"Failed to append stream {_stream} with expected version {aggregate.Version}. " +
+                    $"Failed to append stream {streamName} with expected version {aggregate.Version}. " +
                     $"{(page.Status == SliceReadStatus.StreamNotFound ? "Stream not found!" : $"Current Version: {page.LastEventNumber}")}");
             }
 
             //Log.Debug("Saved {count} {aggregate} change(s) into stream {streamName}", changes.Length, aggregate, stream);
 
             //foreach (var change in aggregate.GetChanges())
-               // Log.Information(change.ToString());
+            // Log.Information(change.ToString());
 
             return (
                 result.NextExpectedVersion,

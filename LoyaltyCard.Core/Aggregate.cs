@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace EventStoreHelloWorld
+namespace LoyaltyCard.Core
 {
     public abstract class Aggregate
     {

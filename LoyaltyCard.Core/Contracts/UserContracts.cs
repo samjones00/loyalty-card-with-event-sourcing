@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EventStoreHelloWorld.UserContracts
+namespace LoyaltyCard.Core.UserContracts
 {
     public class Create
     {

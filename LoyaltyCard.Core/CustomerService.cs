@@ -1,17 +1,17 @@
-﻿using EventStore.ClientAPI;
-using EventStoreHelloWorld.Domain;
+﻿using LoyaltyCard.Core.Domain;
+using LoyaltyCard.Core.Interfaces;
 using System;
 using System.Threading.Tasks;
 
-namespace EventStoreHelloWorld
+namespace LoyaltyCard.Core
 {
-    public class UserService
+    public class CustomerService: ICustomerService
     {
-        AggregateStore _store;
+        IAggregateStore _aggregateStore;
 
-        public UserService(IEventStoreConnection connection, string streamName)
+        public CustomerService(IAggregateStore aggregateStore)
         {
-            _store = new AggregateStore(connection, streamName);
+            _aggregateStore = aggregateStore;
         }
 
         public Task Handle<T>(T command) where T : class
@@ -31,9 +31,9 @@ namespace EventStoreHelloWorld
 
         async Task Execute(Guid id, Func<User, Task> update)
         {
-            var ad = await _store.Load<User>(id);
+            var ad = await _aggregateStore.Load<User>(id);
             await update(ad);
-            await _store.Save(ad);
+            await _aggregateStore.Save(ad);
         }
 
         Task Execute(Guid id, Action<User> update) => Execute(id, user => { update(user); return Task.CompletedTask; });
