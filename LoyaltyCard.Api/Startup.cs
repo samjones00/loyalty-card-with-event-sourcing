@@ -1,11 +1,11 @@
-using LoyaltyCard.DependencyInjection;
+using LoyaltyCard.Core;
+using LoyaltyCard.Domain.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Net;
-using System.Threading.Tasks;
+using LoyaltyCard.Providers.EventStore.DependencyInjection;
 
 namespace LoyaltyCard.Api
 {
@@ -21,22 +21,10 @@ namespace LoyaltyCard.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<ICustomerService, CustomerService>();
             services.AddControllers();
-            services.RegisterServices();
+            services.RegisterEventStoreServices();
             services.AddSwaggerGen();
-        }
-
-        async Task<EventStore.ClientAPI.IEventStoreConnection> GetConnection()
-        {
-            var connection = EventStore.ClientAPI.EventStoreConnection.Create(
-                new IPEndPoint(IPAddress.Loopback, 1113)
-            );
-
-            await connection
-                .ConnectAsync()
-                .ConfigureAwait(false);
-
-            return connection;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

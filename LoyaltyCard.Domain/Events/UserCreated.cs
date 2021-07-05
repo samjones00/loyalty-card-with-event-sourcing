@@ -1,6 +1,7 @@
 ﻿using System;
+using LoyaltyCard.Domain.Interfaces;
 
-namespace LoyaltyCard.Core.Events
+namespace LoyaltyCard.Domain.Events
 {
     public class UserCreated : IEvent
     {

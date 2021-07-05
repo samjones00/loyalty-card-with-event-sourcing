@@ -1,13 +1,14 @@
-﻿using LoyaltyCard.Core.Domain;
-using LoyaltyCard.Core.Interfaces;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using LoyaltyCard.Core.Models;
+using LoyaltyCard.Domain.Contracts.User;
+using LoyaltyCard.Domain.Interfaces;
 
 namespace LoyaltyCard.Core
 {
     public class CustomerService: ICustomerService
     {
-        IAggregateStore _aggregateStore;
+        private readonly IAggregateStore _aggregateStore;
 
         public CustomerService(IAggregateStore aggregateStore)
         {
@@ -18,11 +19,11 @@ namespace LoyaltyCard.Core
         {
             switch (command)
             {
-                case UserContracts.Create x:
+                case Create x:
                     return Execute(x.UserId, user => user.CreateUser(x.UserId));
-                case UserContracts.ChangeName x:
+                case ChangeName x:
                     return Execute(x.UserId, user => user.ChangeName(x.FirstName, x.LastName));
-                case UserContracts.Delete x:
+                case Delete x:
                     return Execute(x.UserId, user => user.Delete());
                 default:
                     return Task.CompletedTask;

@@ -1,7 +1,8 @@
-﻿using LoyaltyCard.Core.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using LoyaltyCard.Domain.Contracts.User;
+using LoyaltyCard.Domain.Interfaces;
 
 namespace LoyaltyCard.Api.Controllers
 {
@@ -17,13 +18,13 @@ namespace LoyaltyCard.Api.Controllers
         }
 
         [HttpPost]
-        public Task<IActionResult> Create([FromBody] Core.UserContracts.Create cmd) => Handle(cmd);
+        public Task<IActionResult> Create([FromBody] Create cmd) => Handle(cmd);
 
         [HttpPut]
-        public Task<IActionResult> Update([FromBody] Core.UserContracts.ChangeName cmd) => Handle(cmd);
+        public Task<IActionResult> Update([FromBody] ChangeName cmd) => Handle(cmd);
 
         [HttpDelete]
-        public Task<IActionResult> Delete([FromBody] Core.UserContracts.Delete cmd) => Handle(cmd);
+        public Task<IActionResult> Delete([FromBody] Delete cmd) => Handle(cmd);
 
         async Task<IActionResult> Handle<T>(T cmd) where T : class
         {

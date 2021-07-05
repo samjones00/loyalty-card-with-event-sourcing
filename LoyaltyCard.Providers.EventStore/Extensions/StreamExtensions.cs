@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LoyaltyCard.Core.Extensions
+namespace LoyaltyCard.Providers.EventStore.Extensions
 {
     public static class StreamExtensions
     {

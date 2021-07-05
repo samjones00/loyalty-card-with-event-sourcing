@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LoyaltyCard.Core.UserContracts
+namespace LoyaltyCard.Domain.Contracts.User
 {
     public class Create
     {

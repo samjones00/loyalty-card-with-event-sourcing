@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LoyaltyCard.Domain.Interfaces;
 
 namespace LoyaltyCard.Core
 {
-    public abstract class Aggregate
+    public abstract class Aggregate: IAggregate
     {
         readonly IList<object> _changes = new List<object>();
 

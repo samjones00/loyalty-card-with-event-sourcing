@@ -1,21 +1,22 @@
-﻿using EventStore.ClientAPI;
-using LoyaltyCard.Core.Extensions;
-using LoyaltyCard.Core.Interfaces;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using System;
+﻿using System;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using EventStore.ClientAPI;
+using EventStore.ClientAPI.SystemData;
+using LoyaltyCard.Domain.Interfaces;
+using LoyaltyCard.Providers.EventStore.Extensions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
-namespace LoyaltyCard.Core
+namespace LoyaltyCard.Providers.EventStore
 {
     public class AggregateStore : IAggregateStore
     {
         const int MaxReadSize = 4096;
         readonly IEventStoreConnection _connection;
-        readonly EventStore.ClientAPI.SystemData.UserCredentials _userCredentials;
+        readonly UserCredentials _userCredentials;
 
         public AggregateStore(IEventStoreConnection connection)
         {
@@ -23,7 +24,7 @@ namespace LoyaltyCard.Core
         }
 
         public async Task<T> Load<T>(Guid userId, CancellationToken cancellationToken = default)
-            where T : Aggregate, new()
+            where T : IAggregate, new()
         {
             var streamName = StreamExtensions.GetStreamName<T>(userId);
             //if (IsNullOrWhiteSpace(aggregateId))
@@ -41,8 +42,7 @@ namespace LoyaltyCard.Core
                 {
                     aggregate.Load(
                         page.Events.Last().Event.EventNumber,
-                        page.Events.Select(re => Deserialize(re.Event.Data, re.Event.EventType))
-                        .ToArray());
+                        Enumerable.ToArray<object>(page.Events.Select(re => Deserialize(re.Event.Data, re.Event.EventType))));
                 }
 
                 nextPageStart = !page.IsEndOfStream ? page.NextEventNumber : -1;
@@ -59,7 +59,7 @@ namespace LoyaltyCard.Core
         /// </summary>
         public async Task<(long NextExpectedVersion, long LogPosition, long CommitPosition)> Save<T>(
             T aggregate, CancellationToken cancellationToken = default)
-            where T : Aggregate
+            where T : IAggregate
         {
             if (aggregate == null)
                 throw new ArgumentNullException(nameof(aggregate));
@@ -67,7 +67,7 @@ namespace LoyaltyCard.Core
             var streamName = StreamExtensions.GetStreamName<T>(aggregate.Id);
 
             var changes = aggregate.GetChanges()
-                .Select(e => new EventStore.ClientAPI.EventData(Guid.NewGuid(), e.GetType().FullName, true, Serialize(e), null)).ToArray();
+                .Select(e => new EventData(Guid.NewGuid(), e.GetType().FullName, true, Serialize(e), null)).ToArray();
 
             if (!changes.Any())
             {
@@ -109,7 +109,7 @@ namespace LoyaltyCard.Core
         };
 
         public byte[] Serialize(object obj) =>
-           Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(obj, DefaultSettings));
+           Encoding.UTF8.GetBytes((string) JsonConvert.SerializeObject(obj, DefaultSettings));
 
         public object Deserialize(byte[] data, string typeName)
         {

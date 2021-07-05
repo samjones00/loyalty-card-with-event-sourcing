@@ -1,7 +1,7 @@
-﻿using LoyaltyCard.Core.Events;
-using System;
+﻿using System;
+using LoyaltyCard.Domain.Events;
 
-namespace LoyaltyCard.Core.Domain
+namespace LoyaltyCard.Core.Models
 {
     public class User : Aggregate
     {

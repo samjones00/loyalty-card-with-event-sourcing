@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace LoyaltyCard.Core.Interfaces
+namespace LoyaltyCard.Domain.Interfaces
 {
     public interface ICustomerService
     {
