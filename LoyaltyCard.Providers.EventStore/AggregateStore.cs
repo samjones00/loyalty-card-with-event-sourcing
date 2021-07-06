@@ -17,10 +17,12 @@ namespace LoyaltyCard.Providers.EventStore
         const int MaxReadSize = 4096;
         readonly IEventStoreConnection _connection;
         readonly UserCredentials _userCredentials;
+        private readonly ISerializer _serializer;
 
-        public AggregateStore(IEventStoreConnection connection)
+        public AggregateStore(IEventStoreConnection connection, ISerializer serializer)
         {
             _connection = connection;
+            _serializer = serializer;
         }
 
         public async Task<T> Load<T>(Guid userId, CancellationToken cancellationToken = default)
@@ -42,7 +44,7 @@ namespace LoyaltyCard.Providers.EventStore
                 {
                     aggregate.Load(
                         page.Events.Last().Event.EventNumber,
-                        Enumerable.ToArray<object>(page.Events.Select(re => Deserialize(re.Event.Data, re.Event.EventType))));
+                        Enumerable.ToArray<object>(page.Events.Select(re => _serializer.DeserializeFromByteArray(re.Event.Data, re.Event.EventType))));
                 }
 
                 nextPageStart = !page.IsEndOfStream ? page.NextEventNumber : -1;
@@ -67,7 +69,7 @@ namespace LoyaltyCard.Providers.EventStore
             var streamName = StreamExtensions.GetStreamName<T>(aggregate.Id);
 
             var changes = aggregate.GetChanges()
-                .Select(e => new EventData(Guid.NewGuid(), e.GetType().FullName, true, Serialize(e), null)).ToArray();
+                .Select(e => new EventData(Guid.NewGuid(), e.GetType().FullName, true, _serializer.SerializeToByteArray(e), null)).ToArray();
 
             if (!changes.Any())
             {
@@ -100,25 +102,5 @@ namespace LoyaltyCard.Providers.EventStore
                 result.LogPosition.CommitPosition,
                 result.LogPosition.PreparePosition);
         }
-
-        public static readonly JsonSerializerSettings DefaultSettings = new JsonSerializerSettings
-        {
-            ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            TypeNameHandling = TypeNameHandling.None,
-            NullValueHandling = NullValueHandling.Ignore
-        };
-
-        public byte[] Serialize(object obj) =>
-           Encoding.UTF8.GetBytes((string) JsonConvert.SerializeObject(obj, DefaultSettings));
-
-        public object Deserialize(byte[] data, string typeName)
-        {
-            var type = GetType(typeName);
-            var result = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(data), type, DefaultSettings);
-
-            return result;
-        }
-
-        public Type GetType(string typeName) => AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()).First(x => x.FullName == typeName);
     }
 }

@@ -1,5 +1,6 @@
 using LoyaltyCard.Core;
 using LoyaltyCard.Domain.Interfaces;
+using LoyaltyCard.Providers.Cosmos.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,8 +23,10 @@ namespace LoyaltyCard.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<ICustomerService, CustomerService>();
+            services.AddTransient<ISerializer, Serializer>();
             services.AddControllers();
-            services.RegisterEventStoreServices();
+            //services.RegisterEventStoreProvider();
+            services.RegisterCosmosProvider();
             services.AddSwaggerGen();
         }
 

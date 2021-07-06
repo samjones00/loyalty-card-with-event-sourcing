@@ -8,7 +8,7 @@ namespace LoyaltyCard.Providers.EventStore.DependencyInjection
 {
     public static class Startup
     {
-        public static IServiceCollection RegisterEventStoreServices(this IServiceCollection services)
+        public static IServiceCollection RegisterEventStoreProvider(this IServiceCollection services)
         {
             services.AddTransient<IAggregateStore, AggregateStore>();
             services.AddTransient<IEventStoreConnection>(x => GetConnection().Result);
