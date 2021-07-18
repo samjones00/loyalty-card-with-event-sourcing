@@ -6,9 +6,9 @@ using LoyaltyCard.Domain.Interfaces;
 
 namespace LoyaltyCard.Providers.EventStore.DependencyInjection
 {
-    public static class Startup
+    public static class StartupExtensions
     {
-        public static IServiceCollection RegisterEventStoreProvider(this IServiceCollection services)
+        public static IServiceCollection AddEventStoreProvider(this IServiceCollection services)
         {
             services.AddTransient<IAggregateStore, AggregateStore>();
             services.AddTransient<IEventStoreConnection>(x => GetConnection().Result);

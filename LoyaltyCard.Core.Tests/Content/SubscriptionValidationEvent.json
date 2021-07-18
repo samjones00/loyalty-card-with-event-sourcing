@@ -1,0 +1,13 @@
+﻿[{
+  "id": "4368084e-a1b4-4888-bfec-edec94d0f823",
+  "topic": "/subscriptions/1ad2775d-4cce-4170-a27e-814087092b90/resourceGroups/rg-storage-queues/providers/Microsoft.Storage/storageAccounts/storagequeuessjo",
+  "subject": "",
+  "data": {
+    "validationCode": "D9192B09-82EA-44D6-8580-B4E4633F1D2E",
+    "validationUrl": "https://rp-uksouth.eventgrid.azure.net:553/eventsubscriptions/webhook/validate?id=D9192B09-82EA-44D6-8580-B4E4633F1D2E&t=2021-07-18T19:19:01.2177564Z&apiVersion=2020-10-15-preview&token=H2S4f%2bp5QVubOOBf2YoeuI56iKkiOLedXxTlZEkZOkg%3d"
+  },
+  "eventType": "Microsoft.EventGrid.SubscriptionValidationEvent",
+  "eventTime": "2021-07-18T19:19:01.2177564Z",
+  "metadataVersion": "1",
+  "dataVersion": "2"
+}]

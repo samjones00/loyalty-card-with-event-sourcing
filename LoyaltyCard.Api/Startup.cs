@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using LoyaltyCard.Providers.EventStore.DependencyInjection;
+using LoyaltyCard.Core.DependencyInjection;
 
 namespace LoyaltyCard.Api
 {
@@ -23,11 +24,12 @@ namespace LoyaltyCard.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<ICustomerService, CustomerService>();
-            services.AddTransient<ISerializer, Serializer>();
+            services.AddSingleton<ISerializer, Serializer>();
             services.AddQueueClient(Configuration);
+
             services.AddControllers();
-            //services.RegisterEventStoreProvider();
-            services.RegisterCosmosProvider();
+            //services.AddEventStoreClient();
+            services.AddCosmosProvider();
             services.AddSwaggerGen();
         }
 

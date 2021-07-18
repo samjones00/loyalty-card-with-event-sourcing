@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using LoyaltyCard.Core.Models;
-using LoyaltyCard.Domain.Contracts.User;
+using LoyaltyCard.Domain.Contracts.Customer;
 using LoyaltyCard.Domain.Interfaces;
 
 namespace LoyaltyCard.Core
@@ -19,12 +19,12 @@ namespace LoyaltyCard.Core
         {
             switch (command)
             {
-                case Create x:
-                    return Execute(x.UserId, user => user.CreateUser(x.UserId));
-                case ChangeName x:
-                    return Execute(x.UserId, user => user.ChangeName(x.FirstName, x.LastName));
+                case CreateCustomer x:
+                    return Execute(x.CustomerId, user => user.CreateUser(x.CustomerId));
+                case ChangeCustomerName x:
+                    return Execute(x.CustomerId, user => user.ChangeName(x.FirstName, x.LastName));
                 case Delete x:
-                    return Execute(x.UserId, user => user.Delete());
+                    return Execute(x.CustomerId, user => user.Delete());
                 default:
                     return Task.CompletedTask;
             }

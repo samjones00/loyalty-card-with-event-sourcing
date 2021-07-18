@@ -4,9 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace LoyaltyCard.Providers.Cosmos.DependencyInjection
 {
-    public static class Startup
+    public static class StartupExtensions
     {
-        public static IServiceCollection RegisterCosmosProvider(this IServiceCollection services)
+        public static IServiceCollection AddCosmosProvider(this IServiceCollection services)
         {
             services.AddTransient<IAggregateStore, AggregateStore>();
             services.AddTransient<CosmosClient>(x => GetConnection());
@@ -16,7 +16,8 @@ namespace LoyaltyCard.Providers.Cosmos.DependencyInjection
 
         private static CosmosClient GetConnection()
         {
-            var connectionString = "";
+            var connectionString =
+                "AccountEndpoint=https://cosmos-sjo.documents.azure.com:443/;AccountKey=u1kbzfCfnqr8Biq57WTqqsB1GDKqK4RAiN3JU6Ttq6AVpl67WsYkvRtbweNv0AjvZNeFZ6sM2F6QWhMPgXuKkw==;";
 
             var client = new CosmosClient(connectionString, new CosmosClientOptions
             {

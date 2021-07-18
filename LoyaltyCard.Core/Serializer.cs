@@ -27,9 +27,9 @@ namespace LoyaltyCard.Core
             return result;
         }
 
-        public string SerializeToString(object obj) => JsonConvert.SerializeObject(obj, DefaultSettings);
+        public string SerializeToJson(object obj) => JsonConvert.SerializeObject(obj, DefaultSettings);
 
-        public object DeserializeFromString(string json, string typeName)
+        public object DeserializeFromJson(string json, string typeName)
         {
             var type = GetType(typeName);
 

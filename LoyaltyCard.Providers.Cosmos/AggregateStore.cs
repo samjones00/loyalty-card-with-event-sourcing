@@ -42,7 +42,7 @@ namespace LoyaltyCard.Providers.Cosmos
                 aggregate.Load(
                     currentResultSet.Last().Version,
                     Enumerable.ToArray(currentResultSet.Select(re =>
-                        _serializer.DeserializeFromString(re.Data, re.EventType))));
+                        _serializer.DeserializeFromJson(re.Data, re.EventType))));
             }
 
             return aggregate;
@@ -59,7 +59,7 @@ namespace LoyaltyCard.Providers.Cosmos
 
             var changes = aggregate.GetChanges()
                 .Select(e => new EventData(Guid.NewGuid().ToString(), aggregate.Id.ToString(), e.GetType().FullName,
-                    true, _serializer.SerializeToString(e), null)).ToArray();
+                    true, _serializer.SerializeToJson(e), null)).ToArray();
 
             for (int i = 0; i < changes.Length; i++)
             {

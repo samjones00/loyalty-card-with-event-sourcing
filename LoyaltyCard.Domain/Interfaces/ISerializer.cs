@@ -6,8 +6,8 @@
 
         object DeserializeFromByteArray(byte[] data, string typeName);
 
-        string SerializeToString(object obj);
+        string SerializeToJson(object obj);
 
-        object DeserializeFromString(string json, string typeName);
+        object DeserializeFromJson(string json, string typeName);
     }
 }
