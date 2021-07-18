@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using LoyaltyCard.Domain.Contracts.User;
+using LoyaltyCard.Domain.Contracts.Customer;
 using LoyaltyCard.Domain.Interfaces;
 
 namespace LoyaltyCard.Api.Controllers
@@ -10,26 +10,28 @@ namespace LoyaltyCard.Api.Controllers
     [Route("Customer")]
     public class CustomerController : ControllerBase
     {
-        private readonly ICustomerService _service;
+        private readonly IQueueService _queueService;
 
-        public CustomerController(ILogger<CustomerController> logger, ICustomerService service)
+        public CustomerController(ILogger<CustomerController> logger, IQueueService queueService)
         {
-            _service = service;
+            _queueService = queueService;
         }
 
         [HttpPost]
-        public Task<IActionResult> Create([FromBody] Create cmd) => Handle(cmd);
+        public Task<IActionResult> Create([FromBody] CreateCustomer cmd) => Handle(cmd);
 
         [HttpPut]
-        public Task<IActionResult> Update([FromBody] ChangeName cmd) => Handle(cmd);
+        public Task<IActionResult> Update([FromBody] ChangeCustomerName cmd) => Handle(cmd);
 
         [HttpDelete]
         public Task<IActionResult> Delete([FromBody] Delete cmd) => Handle(cmd);
 
         async Task<IActionResult> Handle<T>(T cmd) where T : class
         {
+            await _queueService.Enqueue(cmd);
+
             //Log.Information(cmd.ToString());
-            await _service.Handle(cmd);
+           // await _service.Handle(cmd);
             return Ok();
         }
     }

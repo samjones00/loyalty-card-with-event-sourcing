@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31410.357
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31410.414
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{4C0DB625-728D-4B0B-8280-284BDEF340D6}"
 EndProject
@@ -9,13 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoyaltyCard.Api", "LoyaltyC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoyaltyCard.Core", "LoyaltyCard.Core\LoyaltyCard.Core.csproj", "{BBB1CEB9-236A-4116-B3FF-491753B05870}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoyaltyCard.Domain", "LoyaltyCard.Domain\LoyaltyCard.Domain.csproj", "{DD7C9DC8-CE13-47F8-980B-3D01BEFC3A25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoyaltyCard.Domain", "LoyaltyCard.Domain\LoyaltyCard.Domain.csproj", "{DD7C9DC8-CE13-47F8-980B-3D01BEFC3A25}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{88B9A39E-5C7D-4821-BCF4-36F683CADB16}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoyaltyCard.Providers.EventStore", "LoyaltyCard.Providers.EventStore\LoyaltyCard.Providers.EventStore.csproj", "{8A87C75E-787E-4967-9708-A9D1875C0FA1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoyaltyCard.Providers.Cosmos", "LoyaltyCard.Providers.Cosmos\LoyaltyCard.Providers.Cosmos.csproj", "{6F6D9C8C-3EEA-4FAF-BA85-7782CEF60BB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoyaltyCard.Providers.Cosmos", "LoyaltyCard.Providers.Cosmos\LoyaltyCard.Providers.Cosmos.csproj", "{6F6D9C8C-3EEA-4FAF-BA85-7782CEF60BB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoyaltyCard.Core.Tests", "LoyaltyCard.Core.Tests\LoyaltyCard.Core.Tests.csproj", "{55ABF317-8DD8-44FF-BAB3-97E1DFF29645}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{6F6D9C8C-3EEA-4FAF-BA85-7782CEF60BB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F6D9C8C-3EEA-4FAF-BA85-7782CEF60BB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F6D9C8C-3EEA-4FAF-BA85-7782CEF60BB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55ABF317-8DD8-44FF-BAB3-97E1DFF29645}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55ABF317-8DD8-44FF-BAB3-97E1DFF29645}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55ABF317-8DD8-44FF-BAB3-97E1DFF29645}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55ABF317-8DD8-44FF-BAB3-97E1DFF29645}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

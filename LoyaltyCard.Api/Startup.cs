@@ -24,6 +24,7 @@ namespace LoyaltyCard.Api
         {
             services.AddTransient<ICustomerService, CustomerService>();
             services.AddTransient<ISerializer, Serializer>();
+            services.AddQueueClient(Configuration);
             services.AddControllers();
             //services.RegisterEventStoreProvider();
             services.RegisterCosmosProvider();
